@@ -1,4 +1,5 @@
-gem 'minitest'
+require './linked_list'
+require './node'
 require 'minitest/autorun'
 require 'minitest/pride'
 
@@ -10,13 +11,11 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_nodes_have_data
-    skip
     node = Node.new("pizza")
     assert_equal "pizza", node.data
   end
 
   def test_nodes_have_next_node
-    skip
     n1 = Node.new("pizza")
     n2 = Node.new("cats")
     n1.next_node = n2
@@ -25,31 +24,26 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_accepts_next_node_on_init
-    skip
     n1 = Node.new("pizza", Node.new("cats"))
     assert_equal "cats", n1.next_node.data
     assert_equal Node, n1.next_node.class
   end
 
   def test_it_starts_with_zero_elements
-    skip
     assert_equal 0, list.count
   end
 
   def test_a_new_list_starts_with_nil_head
-    skip
     assert_equal nil, LinkedList.new.head
   end
 
   def test_it_pushes_a_single_element_onto_a_list
-    skip
     list.push("pizza")
     assert_equal "pizza", list.head.data
     assert_equal 1, list.count
   end
 
   def test_it_pushes_two_elements
-    skip
     list.push("pizza")
     assert_equal "pizza", list.head.data
     list.push("stromboli")
@@ -57,7 +51,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_pushes_three_elements_onto_a_list
-    skip
     list.push("hello")
     assert_equal "hello", list.head.data
     list.push("world")
@@ -69,7 +62,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_adds_four_elements
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -80,7 +72,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_pops_the_last_element_from_the_list
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -90,7 +81,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_a_popped_element_is_removed
-    skip
     list.push("hello")
     output = list.pop
     assert_equal "hello", output
@@ -98,19 +88,16 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_pops_nil_when_there_are_no_elements
-    skip
     assert_nil list.pop
   end
 
   def test_it_deletes_a_solo_node
-    skip
     list.push("hello")
     list.delete("hello")
     assert_equal 0, list.count
   end
 
   def test_it_does_not_delete_when_the_data_does_not_match
-    skip
     list.push("hello")
     list.push("world")
     list.delete("today")
@@ -118,7 +105,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_deletes_a_last_node
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -127,7 +113,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_deletes_a_middle_node
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -138,7 +123,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_deletes_the_head_when_there_are_more_nodes
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -149,12 +133,10 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_converts_to_an_array_when_there_are_no_elements
-    skip
     assert_equal [], list.to_a
   end
 
   def test_it_converts_to_an_array_with_several_elements
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -162,7 +144,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_it_finds_the_last_node
-    skip
     list.push("hello")
     list.push("world")
     node = list.last_node
@@ -170,7 +151,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_a_node_links_to_its_next_element
-    skip
     list.push("hello")
     list.push("world")
     assert_equal "world", list.last_node.data
@@ -178,13 +158,11 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_next_node_for_the_last_node_is_nil
-    skip
     list.push("world")
     assert_nil list.last_node.next_node
   end
 
   def test_find_if_an_element_is_included_in_the_list
-    skip
     list.push("hello")
     list.push("world")
     assert_equal true, list.include?("hello")
@@ -192,7 +170,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_find_a_given_node
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -202,7 +179,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_inserts_node_at_arbitrary_position
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -214,7 +190,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_inserted_node_is_next_node_for_previous_node
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -226,7 +201,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_insert_after_adds_a_node_after_a_given_node
-    skip
     list.push("hello")
     list.push("world")
     list.push("today")
@@ -238,7 +212,6 @@ class LinkedListTest < Minitest::Test
   end
 
   def test_distance_returns_distance_between_two_nodes
-    skip
     list.push("hello")
     list.push("pizza")
     list.push("world")
