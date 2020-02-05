@@ -8,9 +8,9 @@ class LinkedList
   end
 
   def push(data)
+    @count += 1
     return @head = Node.new(data) unless @head
     push_recursive(data, @head)
-    @count += 1
   end
 
   def push_recursive(data, curr)
@@ -20,66 +20,58 @@ class LinkedList
 
   def pop()
     return nil unless @head
+    @count -= 1
+    
     if @head.next_node.nil?
       data = @head.data
       @head = nil
-      @count -= 1
       return data
     end
 
-    prev = @head
-    curr = prev.next_node
+    pop_recursive(@head.next_node, @head)
+  end
 
-    while curr.next_node != nil
-      prev = prev.next_node
-      curr = curr.next_node
+  def pop_recursive(curr, prev)
+    if curr.next_node
+      pop_recursive(curr.next_node, curr)
+    else
+      prev.next_node = nil
+      curr.data
     end
-    prev.next_node = nil
-    
-    @count -= 1
-    return curr.data
   end
 
   def delete(data)
-    return 0 unless @head
+    return nil unless @head
     if @head.data == data
-      @head = @head.next_node
-      return @count -= 1
+      @count -= 1
+      return @head = @head.next_node
     end
+    delete_recursive(@head, data)
+  end
 
-    prev = @head
-    curr = prev.next_node
-
-    while curr
-      if curr.data == data
-        prev.next_node = curr.next_node
-        return  @count -= 1
-      end
-      prev = prev.next_node
-      curr = curr.next_node
+  def delete_recursive(curr, data, prev = nil)
+    return nil unless curr
+    if curr.data == data
+      prev.next_node = curr.next_node
+      @count -= 1
     end
-    @count
+    delete_recursive(curr.next_node, data, curr)
   end
 
   def to_a
     return [] unless @head
     array = []
-    curr = @head
-    while curr
-      array.push(curr.data)
-      curr = curr.next_node
-    end
+    to_a_recursive(@head, array)
     array
   end
 
-  def last_node
-    return nil unless @head
+  def to_a_recursive(curr, array)
+    array.push(curr.data)
+    to_a_recursive(curr.next_node, array) if curr.next_node
+  end
 
-    curr = @head
-    while curr.next_node
-      curr = curr.next_node
-    end
-    curr
+  def last_node(curr = @head)
+    curr.next_node ? last_node(curr.next_node) : curr
   end
 
   def head_node
@@ -92,28 +84,26 @@ class LinkedList
 
   def find(data)
     return nil unless @head
-    return @head if @head.data == data
+    find_recursive(data)
+  end
 
-    curr = @head.next_node
-    while curr
-      return curr if curr.data == data
-      curr = curr.next_node
-    end
-    curr
+  def find_recursive(data, curr = @head)
+    return curr if curr.data == data
+    find_recursive(data, curr.next_node) if curr.next_node
   end
 
   def index(data)
     return -1 unless @head
-    return 0 if @head.data == data
+    index_recursive(data, @head, 0)
+  end
 
-    i = 1
-    curr = @head.next_node
-    while curr
-      return i if curr.data == data
-      curr = curr.next_node
-      i += 1
+  def index_recursive(data, curr, curr_index)
+    if curr.data == data
+      curr_index
+    else 
+      curr.next_node ? index_recursive(data, curr.next_node, curr_index + 1)
+                     : -1
     end
-    -1
   end
 
   def insert(i, data)
@@ -121,14 +111,12 @@ class LinkedList
     @count += 1
     return @head = Node.new(data, @head) if i == 0
 
-    currIndex = 1
-    curr = @head
-    while currIndex < i
-      currIndex += 1
-      curr = curr.next_node
-    end
+    insert_recursive(i, @head, 1, data)
+  end
 
-    curr.next_node = Node.new(data, curr.next_node)
+  def insert_recursive(i, curr, curr_index, data)
+    curr_index < i ? insert_recursive(i, curr.next_node, curr_index + 1, data)
+                   : curr.next_node = Node.new(data, curr.next_node)
   end
 
   def insert_after(prev_data, data)
@@ -138,19 +126,26 @@ class LinkedList
 
   def distance(first_data, second_data)
     return -1 if count < 2
-    x = nil
-    y = nil
+    node_a = find_with_index(first_data)
+    node_b = find_with_index(second_data, node_a[:node], node_a[:index])
+    (node_a[:index] - node_b[:index]).abs
+  end
 
-    curr = @head
-    currIndex = 0
-    while curr
-      if curr.data == first_data || curr.data == second_data
-        x ? y = currIndex : x = currIndex
-        return (x - y).abs if y
+  def find_with_index(data, curr = @head, curr_index = 0)
+    return nil unless @head
+
+    find_with_index_recursive(data, curr, curr_index)
+  end
+
+  def find_with_index_recursive(data, curr, curr_index)
+    if curr.data == data
+      { node: curr, index: curr_index }
+    else 
+      if curr.next_node 
+        find_with_index_recursive(data, curr.next_node, curr_index + 1)
+      else 
+        { node: nil, index: -1 }
       end
-      curr = curr.next_node
-      currIndex += 1
     end
-    return -1
   end
 end

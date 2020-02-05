@@ -1,7 +1,8 @@
-require './linked_list'
-require './node'
+gem 'minitest'
 require 'minitest/autorun'
 require 'minitest/pride'
+require './linked_list'
+require './node'
 
 class LinkedListTest < Minitest::Test
   attr_reader :list
