@@ -8,17 +8,14 @@ class LinkedList
   end
 
   def push(data)
-    new_node = Node.new(data)
-    if @head == nil
-      @head = new_node
-    else
-      prev = @head
-      while prev.next_node != nil
-        prev = prev.next_node
-      end
-      prev.next_node = new_node
-    end
+    return @head = Node.new(data) unless @head
+    push_recursive(data, @head)
     @count += 1
+  end
+
+  def push_recursive(data, curr)
+    curr.next_node ? push_recursive(data, curr.next_node)
+                   : curr.next_node = Node.new(data)
   end
 
   def pop()
